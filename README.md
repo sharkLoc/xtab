@@ -16,7 +16,7 @@ cargo install xtab
 git clone https://github.com/sharkLoc/xtab.git
 cd xtab
 cargo b --release
-# mv target/release/fqkit to anywhere you want 
+# mv target/release/xtab to anywhere you want 
 ```
 
 ## usage
