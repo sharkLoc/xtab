@@ -10,6 +10,7 @@ pub fn view_csv(
     delimiter: u8,
     out_delimiter: u8,
     skip: usize,
+    truncate: Option<usize>,
     csv: Option<PathBuf>,
     csvo: Option<PathBuf>,
     compression_level: u32,
@@ -32,8 +33,13 @@ pub fn view_csv(
         .delimiter(out_delimiter)
         .from_writer(file_writer(csvo.as_ref(), compression_level)?);
 
-    for rec in csv_reader.records().skip(skip).flatten() {
-        csv_writer.write_record(&rec)?;
+    for mut rec in csv_reader.records().skip(skip).flatten() {
+        if let Some(n) = truncate {
+            rec.truncate(n);
+            csv_writer.write_record(&rec)?;
+        } else {
+            csv_writer.write_record(&rec)?;
+        }
     }
     csv_writer.flush()?;
 

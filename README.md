@@ -39,9 +39,11 @@ Compression level:
 Usage: xtab [OPTIONS] [CSV] <COMMAND>
 
 Commands:
-  view       Show CSV file content
   addheader  Set new header for CSV file [aliases: ah]
+  dim        Dimensions of CSV file
   head       Get first N records from CSV file
+  uniq       Unique data without sorting
+  view       Show CSV file content
   help       Print this message or the help of the given subcommand(s)
 
 Options:

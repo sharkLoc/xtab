@@ -70,12 +70,6 @@ pub struct Args {
 #[derive(Debug, Parser)]
 #[allow(non_camel_case_types)]
 pub enum Cmd {
-    /// Show CSV file content
-    view {
-        /// Skip first N records, not include the header row when option "--no-header" enabled. eg "-s 10 --no-header" will skip 11 records
-        #[arg(short = 's', long = "skip", value_name = "INT", default_value_t = 0 )]
-        skip: usize,
-    },
     /// Set new header for CSV file
     #[command(visible_alias = "ah")]
     addheader {
@@ -83,10 +77,23 @@ pub enum Cmd {
         #[arg(short = 'N', long = "new-header", value_name = "STR")]
         new_header: String,
     },
+    /// Dimensions of CSV file
+    dim {},
     /// Get first N records from CSV file
     head {
         /// Print first N records, if option "--no-header" enabled, the original header row excluded from output
         #[arg(short = 'n', long = "num", default_value_t = 10, value_name = "INT")]
         num: usize,
+    },
+    /// Unique data without sorting
+    uniq {},
+    /// Show CSV file content
+    view {
+        /// Skip first N records, not include the header row when option "--no-header" enabled. eg "-s 10 --no-header" will skip 11 records
+        #[arg(short = 's', long = "skip", value_name = "INT", default_value_t = 0 )]
+        skip: usize,
+        /// If enabled, truncate each record to N fields, if N is greater than the number of fields in this record, then this has no effect
+        #[arg(short = 't', long = "truncate", value_name = "INT")]
+        truncate: Option<usize>,
     },
 }

@@ -12,6 +12,7 @@ pub fn head_csv(
     num: usize,
     csv: Option<PathBuf>,
     csvo: Option<PathBuf>,
+    compression_level: u32,
 ) -> Result<(), Error> {
     let start = Instant::now();
 
@@ -29,7 +30,7 @@ pub fn head_csv(
     let mut csv_writer = WriterBuilder::new()
         .has_headers(no_header)
         .delimiter(out_delimiter)
-        .from_writer(file_writer(csvo.as_ref(),1)?);
+        .from_writer(file_writer(csvo.as_ref(), compression_level)?);
 
     for rec in csv_reader.records().flatten().take(num) {
         csv_writer.write_record(&rec)?;

@@ -10,6 +10,7 @@ pub fn addheader_csv(
     out_delimiter: u8,
     csv: Option<PathBuf>,
     csvo: Option<PathBuf>,
+    compression_level: u32,
 ) -> Result<(), Error> {
     let start = Instant::now();
 
@@ -27,7 +28,7 @@ pub fn addheader_csv(
 
     let mut csv_writer = WriterBuilder::new()
         .delimiter(out_delimiter)
-        .from_writer(file_writer(csvo.as_ref(), 1)?);
+        .from_writer(file_writer(csvo.as_ref(), compression_level)?);
 
     // new header
     let new = new_header.split(',').collect::<Vec<&str>>();
