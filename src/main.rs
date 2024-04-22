@@ -4,26 +4,28 @@ use clap::Parser;
 mod loger;
 mod args;
 mod command;
-use crate::command::view::read_csv;
-use crate::command::addheader::addheader_csv;
-use crate::command::head::head_csv;
+mod utils;
+
+use command::{
+    addheader::*, head::*, view::*,
+};
 
 
 
 fn main() -> Result<(), Error>{
 
-    loger::logs();
     let cmd = args::Args::parse();
+    loger::logger(cmd.verbose, cmd.logfile, cmd.quiet)?;
 
     match cmd.cmd {
-        args::Cmd::view { input, output, no_header,  delimiter } => {
-            read_csv(no_header, delimiter, input, output, cmd.quiet, )?;
+        args::Cmd::view {skip} => {
+            view_csv( cmd.no_header, cmd.delimiter as u8, cmd.out_delimite as u8, skip, cmd.input, cmd.output, cmd.compression_level)?;
         }
-        args::Cmd::addheader { input, output, new_header, delimiter } => {
-            addheader_csv(new_header, delimiter, input, output, cmd.quiet)?;
+        args::Cmd::addheader { new_header } => {
+            addheader_csv(new_header, cmd.delimiter as u8, cmd.out_delimite as u8, cmd.input, cmd.output)?;
         }
-        args::Cmd::head { input, output, no_header, num } => {
-            head_csv(no_header, num, input, output, cmd.quiet)?;
+        args::Cmd::head { num } => {
+            head_csv(cmd.no_header, cmd.delimiter as u8, cmd.out_delimite as u8, num, cmd.input, cmd.output)?;
         }
     }
 

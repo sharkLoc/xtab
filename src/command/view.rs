@@ -1,34 +1,42 @@
 use csv::{WriterBuilder, ReaderBuilder};
 use anyhow::{Ok, Error};
-use std::path::PathBuf;
+use std::{path::PathBuf, time::Instant};
 use log::info;
-use crate::command::utils::*;
+use crate::utils::*;
 
 
-pub fn read_csv(
+pub fn view_csv(
     no_header: bool,
-    delimiter: String,
+    delimiter: u8,
+    out_delimiter: u8,
+    skip: usize,
     csv: Option<PathBuf>,
     csvo: Option<PathBuf>,
-    quiet: bool,
+    compression_level: u32,
 ) -> Result<(), Error> {
-    if !quiet {
-        info!("reading from: {:?}",csv.clone().unwrap());
-    }
+    let start = Instant::now();
 
     let mut csv_reader = ReaderBuilder::new()
         .has_headers(no_header)
-        .delimiter(delimiter.as_bytes()[0])
-        .from_reader(file_reader(&csv)?);
+        .flexible(true)
+        .delimiter(delimiter)
+        .from_reader(file_reader(csv.as_ref())?);
+
+    match csv {
+        Some(csv) => info!("read file from: {:?}",csv),
+        None => info!("read file from stdin ")
+    }
 
     let mut csv_writer = WriterBuilder::new()
         .has_headers(no_header)
-        .delimiter(delimiter.as_bytes()[0])
-        .from_writer(file_writer(&csvo)?);
+        .delimiter(out_delimiter)
+        .from_writer(file_writer(csvo.as_ref(), compression_level)?);
 
-    for rec in csv_reader.records().flatten() {
+    for rec in csv_reader.records().skip(skip).flatten() {
         csv_writer.write_record(&rec)?;
     }
+    csv_writer.flush()?;
 
+    info!("time elapsed is: {:?}", start.elapsed());
     Ok(())
 }
