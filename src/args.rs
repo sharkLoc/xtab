@@ -10,6 +10,7 @@ use clap::{value_parser, Parser};
     next_line_help = false,
     about = "CSV command line utilities"
 )]
+#[command(propagate_version = false, disable_help_flag = false, disable_version_flag = true)]
 #[command(long_about = "A simple and cross-platform program for CSV file manipulation")]
 #[command(before_help=r"xtab supports reading and writing gzip/bzip2/xz format file.
 Compression level:
