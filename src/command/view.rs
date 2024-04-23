@@ -1,9 +1,8 @@
-use csv::{WriterBuilder, ReaderBuilder};
-use anyhow::{Ok, Error};
-use std::{path::PathBuf, time::Instant};
-use log::info;
 use crate::utils::*;
-
+use anyhow::{Error, Ok};
+use csv::{ReaderBuilder, WriterBuilder};
+use log::info;
+use std::{path::PathBuf, time::Instant};
 
 pub fn view_csv(
     no_header: bool,
@@ -24,8 +23,8 @@ pub fn view_csv(
         .from_reader(file_reader(csv.as_ref())?);
 
     match csv {
-        Some(csv) => info!("read file from: {:?}",csv),
-        None => info!("read file from stdin ")
+        Some(csv) => info!("read file from: {:?}", csv),
+        None => info!("read file from stdin "),
     }
 
     let mut csv_writer = WriterBuilder::new()

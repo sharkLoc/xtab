@@ -1,9 +1,8 @@
-use csv::ReaderBuilder;
-use anyhow::{Ok, Error};
-use std::{path::PathBuf, time::Instant};
-use log::*;
 use crate::utils::*;
-
+use anyhow::{Error, Ok};
+use csv::ReaderBuilder;
+use log::*;
+use std::{path::PathBuf, time::Instant};
 
 pub fn dim_csv(
     no_header: bool,
@@ -19,19 +18,19 @@ pub fn dim_csv(
         .flexible(true)
         .delimiter(delimiter)
         .from_reader(file_reader(csv.as_ref())?);
-    
+
     match &csv {
-        Some(csv) => info!("read file from: {:?}",csv),
-        None => info!("read file from stdin ")
+        Some(csv) => info!("read file from: {:?}", csv),
+        None => info!("read file from stdin "),
     }
-    
+
     let mut row = 0usize;
     let mut col = None::<usize>;
-    for rec in csv_reader.records().flatten() { 
+    for rec in csv_reader.records().flatten() {
         row += 1;
         if let Some(col) = col {
             if col != rec.len() {
-                error!("record on line {}: wrong number of fields",row);
+                error!("record on line {}: wrong number of fields", row);
                 std::process::exit(1);
             }
         } else {
@@ -40,7 +39,7 @@ pub fn dim_csv(
     }
 
     let mut out_writer = file_writer(csvo.as_ref(), compression_level)?;
-    
+
     let buf = if let Some(file) = csv {
         format!("file\trows\tcols\n{:?}\t{}\t{}\n", file, row, col.unwrap())
     } else {

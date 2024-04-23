@@ -1,5 +1,10 @@
 //pub mod xlsx2csv;
-pub mod view;
 pub mod addheader;
-pub mod head;
 pub mod dim;
+pub mod head;
+pub mod tail;
+pub mod uniq;
+pub mod view;
+pub mod pretty;
+pub mod drop;
+pub mod freq;

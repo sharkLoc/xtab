@@ -4,11 +4,12 @@ use csv::{ReaderBuilder, WriterBuilder};
 use log::*;
 use std::{path::PathBuf, time::Instant};
 
-pub fn head_csv(
+pub fn tail_csv(
     no_header: bool,
     delimiter: u8,
     out_delimiter: u8,
     num: usize,
+    rev: bool,
     csv: Option<PathBuf>,
     csvo: Option<PathBuf>,
     compression_level: u32,
@@ -25,15 +26,27 @@ pub fn head_csv(
         Some(csv) => info!("read file from: {:?}", csv),
         None => info!("read file from stdin "),
     }
+    let mut recs = vec![];
+    for rec in csv_reader.records().flatten() {
+        recs.push(rec);
+    }
 
     let mut csv_writer = WriterBuilder::new()
         .has_headers(no_header)
         .delimiter(out_delimiter)
         .from_writer(file_writer(csvo.as_ref(), compression_level)?);
 
-    for rec in csv_reader.records().flatten().take(num) {
-        csv_writer.write_record(&rec)?;
+    if rev {
+        info!("output reversed result");
+        for rec in recs.iter().rev().take(num) {
+            csv_writer.write_record(rec)?;
+        }
+    } else {
+        for rec in recs.iter().rev().take(num).rev() {
+            csv_writer.write_record(rec)?;
+        }
     }
+
     csv_writer.flush()?;
 
     info!("time elapsed is: {:?}", start.elapsed());

@@ -41,10 +41,15 @@ Usage: xtab [OPTIONS] [CSV] <COMMAND>
 Commands:
   addheader  Set new header for CSV file [aliases: ah]
   dim        Dimensions of CSV file
-  head       Get first N records from CSV file
-  uniq       Unique data without sorting
+  drop       Drop or Select CSV fields by columns index
+  freq       freq
+  head       Print first N records from CSV file
+  pretty     Convert CSV to a readable aligned table
+  tail       Print last N records from CSV file
+  uniq       Unique data with keys
   view       Show CSV file content
   help       Print this message or the help of the given subcommand(s)
+
 
 Options:
   -h, --help     Print help (see more with '--help')

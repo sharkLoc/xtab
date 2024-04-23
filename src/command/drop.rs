@@ -1,14 +1,15 @@
 use crate::utils::*;
 use anyhow::{Error, Ok};
-use csv::{ReaderBuilder, WriterBuilder};
+use csv::{ReaderBuilder, StringRecord, WriterBuilder};
 use log::*;
 use std::{path::PathBuf, time::Instant};
 
-pub fn uniq_csv(
+pub fn drop_csv(
     no_header: bool,
     delimiter: u8,
     out_delimiter: u8,
     index_str: String,
+    invert: bool,
     csv: Option<PathBuf>,
     csvo: Option<PathBuf>,
     compression_level: u32,
@@ -46,29 +47,20 @@ pub fn uniq_csv(
         .delimiter(out_delimiter)
         .from_writer(file_writer(csvo.as_ref(), compression_level)?);
 
-    let mut row = 0usize;
-    let mut keys = vec![];
     for rec in csv_reader.records().flatten() {
-        row += 1;
-        let mut cols = vec![];
-
-        for idx in col_index.iter() {
-            match rec.get(idx - 1) {
-                Some(x) => cols.push(x),
-                None => {
-                    error!("record on line {}: wrong index of fields", row);
-                    std::process::exit(1);
+        let mut rec_new = StringRecord::new();
+        for (idx,each) in rec.iter().enumerate() {
+            if invert {
+                if col_index.contains(&(idx+1)) {
+                    rec_new.push_field(each);
+                }
+            } else {
+                if !col_index.contains(&(idx+1)) {
+                    rec_new.push_field(each);
                 }
             }
         }
-
-        let key = cols.concat();
-        if keys.contains(&key) {
-            continue;
-        } else {
-            keys.push(key);
-            csv_writer.write_record(&rec)?;
-        }
+        csv_writer.write_record(&rec_new)?;
     }
     csv_writer.flush()?;
 

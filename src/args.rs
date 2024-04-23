@@ -31,10 +31,6 @@ pub struct Args {
     #[arg(value_name = "CSV", global = true, help_heading = Some("Global Arguments"))]
     pub input: Option<PathBuf>,
 
-    /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
-    #[arg(short = 'o', long = "out", value_name = "FILE", global = true, help_heading = Some("Global Arguments"))]
-    pub output: Option<PathBuf>,
-
     /// If set, the first row is treated as a special header row, and the original header row excluded from output
     #[arg(short = 'H', long = "no-header", global = true, help_heading = Some("Global FLAGS"))]
     pub no_header: bool,
@@ -73,20 +69,102 @@ pub enum Cmd {
     /// Set new header for CSV file
     #[command(visible_alias = "ah")]
     addheader {
-        /// Set new header, e.g -N "colum1,column2..."
-        #[arg(short = 'N', long = "new-header", value_name = "STR")]
+        /// Set new header, e.g -n "colum1,column2..."
+        #[arg(short = 'n', long = "new-header", value_name = "STR")]
         new_header: String,
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
     },
+
     /// Dimensions of CSV file
-    dim {},
-    /// Get first N records from CSV file
+    dim {
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
+    },
+
+    /// Drop or Select CSV fields by columns index
+    drop {
+        /// Select columns index, e.g -c 2,3,5
+        #[arg(short = 'c', long = "col-index", value_name = "STR")]
+        col_index: String,
+        /// invert the sense of matching, to select non-matching fields
+        #[arg(short = 'u', long = "invert-match", help_heading = Some("FLAGS"))]
+        invert: bool,
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
+    },
+
+    /// freq
+    freq {
+        /// Select columns index, e.g -c 2,3,5
+        #[arg(short = 'c', long = "col-index", value_name = "STR")]
+        col_index: String,
+        /// Sort by key
+        #[arg(short = 'k', long = "sort-by-key", help_heading = Some("FLAGS"))]
+        key: bool,
+        /// sort by frequency
+        #[arg(short = 'n', long = "sort-by-freq", help_heading = Some("FLAGS"))]
+        value: bool,
+        /// Output reversed result
+        #[arg(short = 'r', long = "rev", help_heading = Some("FLAGS"))]
+        rev: bool,
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
+    },
+
+    /// Print first N records from CSV file
     head {
         /// Print first N records, if option "--no-header" enabled, the original header row excluded from output
         #[arg(short = 'n', long = "num", default_value_t = 10, value_name = "INT")]
         num: usize,
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
     },
-    /// Unique data without sorting
-    uniq {},
+
+    /// Convert CSV to a readable aligned table
+    pretty {
+        /// Set the whole table width
+        #[arg(short = 'w', long = "width-table", value_name = "INT", value_parser = value_parser!(u16).range(0..=65535))]
+        width_table: Option<u16>,
+        /// If set, truncate content of cells which occupies more than INT lines of space
+        #[arg(short = 't', long="truncate", value_name = "INT")]
+        cell_height: Option<usize>,
+        /// Set the alignment of content for each cell, possible values: {left, center, right}
+        #[arg(short ='a', long = "aln", value_name = "STR", default_value_t = String::from("left"))]
+        aln: String,
+        /// Show header in different style
+        #[arg(long = "header", help_heading = Some("FLAGS"))]
+        header: bool,
+    },
+
+    /// Print last N records from CSV file
+    tail {
+        /// Print last N records, if option "--no-header" enabled, the original header row excluded from output
+        #[arg(short = 'n', long = "num", default_value_t = 10, value_name = "INT")]
+        num: usize,
+        /// Output reversed result
+        #[arg(short = 'r', long = "reverse", help_heading = Some("FLAGS"))]
+        rev: bool,
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
+    },
+
+    /// Unique data with keys
+    uniq {
+        /// Select these fields as keys. e.g -k 2,3,5
+        #[arg(short = 'k', long = "key", value_name = "STR")]
+        key: String,
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
+    },
+
     /// Show CSV file content
     view {
         /// Skip first N records, not include the header row when option "--no-header" enabled. eg "-s 10 --no-header" will skip 11 records
@@ -95,5 +173,8 @@ pub enum Cmd {
         /// If enabled, truncate each record to N fields, if N is greater than the number of fields in this record, then this has no effect
         #[arg(short = 't', long = "truncate", value_name = "INT")]
         truncate: Option<usize>,
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
     },
 }
