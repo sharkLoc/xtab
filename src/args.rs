@@ -6,7 +6,7 @@ use clap::{value_parser, Parser};
 #[command(
     name = "xtab",
     author = "sharkLoc",
-    version = "0.0.3",
+    version = "0.0.4",
     next_line_help = false,
     about = "CSV command line utilities",
     long_about = "A simple and cross-platform program for CSV file manipulation"
@@ -101,7 +101,7 @@ pub enum Cmd {
     /// Drop or Select CSV fields by columns index
     drop {
         /// Select columns index, e.g -c 2,3,5
-        #[arg(short = 'c', long = "col-index", value_name = "STR")]
+        #[arg(short = 'c', long = "col-index", value_name = "STR", default_value_t = String::from("1"))]
         col_index: String,
         /// invert the sense of matching, to select non-matching fields
         #[arg(short = 'u', long = "invert-match", help_heading = Some("FLAGS"))]
@@ -114,7 +114,7 @@ pub enum Cmd {
     /// freq
     freq {
         /// Select columns index, e.g -c 2,3,5
-        #[arg(short = 'c', long = "col-index", value_name = "STR")]
+        #[arg(short = 'c', long = "col-index", value_name = "STR", default_value_t = String::from("1"))]
         col_index: String,
         /// Sort by key
         #[arg(short = 'k', long = "sort-by-key", help_heading = Some("FLAGS"))]
@@ -172,7 +172,7 @@ pub enum Cmd {
     /// Unique data with keys
     uniq {
         /// Select these fields as keys. e.g -k 2,3,5
-        #[arg(short = 'k', long = "key", value_name = "STR")]
+        #[arg(short = 'k', long = "key", value_name = "STR", default_value_t = String::from("1"))]
         key: String,
         /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
         #[arg(short = 'o', long = "out", value_name = "FILE")]
