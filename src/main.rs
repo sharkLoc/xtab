@@ -7,7 +7,7 @@ mod command;
 mod utils;
 
 use command::{
-    addheader::addheader_csv, dim::dim_csv, drop::drop_csv, freq::freq_csv, head::head_csv, pretty::pretty_csv, tail::tail_csv, uniq::uniq_csv, view::view_csv
+    addheader::addheader_csv, csv2xlsx::csv_xlsx, dim::dim_csv, drop::drop_csv, freq::freq_csv, head::head_csv, pretty::pretty_csv, tail::tail_csv, uniq::uniq_csv, view::view_csv, xlsx2csv::xlsx_csv
 };
 
 
@@ -44,6 +44,12 @@ fn main() -> Result<(), Error>{
         }
         args::Cmd::freq { col_index,key, value, rev, output } => {
             freq_csv(cmd.no_header, cmd.delimiter as u8, cmd.out_delimite as u8, col_index, key, value, rev, cmd.input, output, cmd.compression_level)?;
+        }
+        args::Cmd::csv2xlsx { bold, border, xlsx } => {
+            csv_xlsx(cmd.no_header, cmd.delimiter as u8, bold, border, cmd.input, &xlsx)?;
+        }
+        args::Cmd::xlsx2csv { xlsx, idx, csv }=> {
+            xlsx_csv(xlsx, idx, cmd.out_delimite as u8, csv, cmd.compression_level)?;
         }
     }
 

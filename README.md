@@ -23,7 +23,7 @@ cargo b --release
 
 ```bash
 xtab -- CSV command line utilities
-Version: 0.0.2
+Version: 0.0.3
 
 Authors: sharkLoc <mmtinfo@163.com>
 Source code: https://github.com/sharkLoc/xtab.git
@@ -40,6 +40,7 @@ Usage: xtab [OPTIONS] [CSV] <COMMAND>
 
 Commands:
   addheader  Set new header for CSV file [aliases: ah]
+  csv2xlsx   Convert CSV/TSV files to XLSX file [aliases: c2x]
   dim        Dimensions of CSV file
   drop       Drop or Select CSV fields by columns index
   freq       freq
@@ -47,6 +48,7 @@ Commands:
   pretty     Convert CSV to a readable aligned table
   tail       Print last N records from CSV file
   uniq       Unique data with keys
+  xlsx2csv   Convert XLSX to CSV format [aliases: x2c]
   view       Show CSV file content
   help       Print this message or the help of the given subcommand(s)
 

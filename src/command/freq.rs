@@ -2,7 +2,7 @@ use crate::utils::*;
 use anyhow::{Error, Ok};
 use csv::{ReaderBuilder, StringRecord, WriterBuilder};
 use log::*;
-use std::{path::PathBuf, time::Instant,collections::HashMap};
+use std::{collections::HashMap, path::PathBuf, time::Instant};
 
 pub fn freq_csv(
     no_header: bool,
@@ -54,13 +54,13 @@ pub fn freq_csv(
     let mut raw_order = vec![];
     for rec in csv_reader.records().flatten() {
         let mut keys = vec![];
-        for (idx,each) in rec.iter().enumerate() {
-            if col_index.contains(&(idx+1)) {
+        for (idx, each) in rec.iter().enumerate() {
+            if col_index.contains(&(idx + 1)) {
                 keys.push(each);
                 keys.push(",");
             }
         }
-        let key =keys.concat();
+        let key = keys.concat();
         if !raw_order.contains(&key) {
             raw_order.push(key.clone());
         }
@@ -73,38 +73,38 @@ pub fn freq_csv(
         .from_writer(file_writer(csvo.as_ref(), compression_level)?);
 
     if sort_key {
-        let mut count = hash.iter().collect::<Vec<(&String,&usize)>>();
+        let mut count = hash.iter().collect::<Vec<(&String, &usize)>>();
         if sort_reverse {
-            count.sort_by(|x,y| y.0.cmp(x.0));
+            count.sort_by(|x, y| y.0.cmp(x.0));
         } else {
-            count.sort_by(|x,y| x.0.cmp(y.0));
+            count.sort_by(|x, y| x.0.cmp(y.0));
         }
 
-        for (k,v) in count {
+        for (k, v) in count {
             let mut tmp_keys = k.split(',').collect::<Vec<&str>>();
             tmp_keys.retain(|&x| x != ""); // strip last "" in tmp_keys
 
             let mut rec_new = StringRecord::new();
-            for each in  tmp_keys{
+            for each in tmp_keys {
                 rec_new.push_field(each);
             }
             rec_new.push_field(&v.to_string());
             csv_writer.write_record(&rec_new)?;
         }
     } else if sort_value {
-        let mut count = hash.iter().collect::<Vec<(&String,&usize)>>();
+        let mut count = hash.iter().collect::<Vec<(&String, &usize)>>();
         if sort_reverse {
-            count.sort_by(|x,y| y.1.cmp(x.1));
+            count.sort_by(|x, y| y.1.cmp(x.1));
         } else {
-            count.sort_by(|x,y| x.1.cmp(y.1));
+            count.sort_by(|x, y| x.1.cmp(y.1));
         }
 
-        for (k,v) in count {
+        for (k, v) in count {
             let mut tmp_keys = k.split(',').collect::<Vec<&str>>();
             tmp_keys.retain(|&x| x != ""); // strip last "" in tmp_keys
 
             let mut rec_new = StringRecord::new();
-            for each in  tmp_keys{
+            for each in tmp_keys {
                 rec_new.push_field(each);
             }
             rec_new.push_field(&v.to_string());
@@ -114,14 +114,14 @@ pub fn freq_csv(
         for k in raw_order.iter() {
             let mut tmp_keys = k.split(',').collect::<Vec<&str>>();
             tmp_keys.retain(|&x| x != ""); // strip last "" in tmp_keys
-    
+
             let mut rec_new = StringRecord::new();
-            for each in  tmp_keys{
+            for each in tmp_keys {
                 rec_new.push_field(each);
             }
             let v = hash.get(k).unwrap();
             rec_new.push_field(&v.to_string());
-    
+
             csv_writer.write_record(&rec_new)?;
         }
     }

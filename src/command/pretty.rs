@@ -1,8 +1,8 @@
 use crate::utils::*;
 use anyhow::{Error, Ok};
+use comfy_table::{modifiers::UTF8_ROUND_CORNERS, presets::UTF8_FULL, *};
 use csv::ReaderBuilder;
 use log::*;
-use comfy_table::{modifiers::UTF8_ROUND_CORNERS, presets::UTF8_FULL, *};
 use std::{path::PathBuf, time::Instant};
 
 pub fn pretty_csv(
@@ -50,11 +50,11 @@ pub fn pretty_csv(
         }
 
         for each in rec.iter() {
-            let cell =  match alignment {
-                "left" =>   Cell::new(each).set_alignment(CellAlignment::Left),
+            let cell = match alignment {
+                "left" => Cell::new(each).set_alignment(CellAlignment::Left),
                 "center" => Cell::new(each).set_alignment(CellAlignment::Center),
-                "right" =>  Cell::new(each).set_alignment(CellAlignment::Right),
-                _ => Cell::new(each)
+                "right" => Cell::new(each).set_alignment(CellAlignment::Right),
+                _ => Cell::new(each),
             };
             row.add_cell(cell);
         }
@@ -65,7 +65,7 @@ pub fn pretty_csv(
         }
         table.add_row(row);
     }
-    println!("{}",table);
+    println!("{}", table);
 
     info!("time elapsed is: {:?}", start.elapsed());
     Ok(())

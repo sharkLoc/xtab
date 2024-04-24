@@ -31,7 +31,7 @@ pub fn drop_csv(
     for idx in index_str.split(',').collect::<Vec<&str>>() {
         let idx = idx.parse::<usize>()?;
         if col_index.contains(&idx) {
-            warn!("duplicate columns index {}, keep first one",idx);
+            warn!("duplicate columns index {}, keep first one", idx);
             continue;
         } else {
             col_index.push(idx);
@@ -49,13 +49,13 @@ pub fn drop_csv(
 
     for rec in csv_reader.records().flatten() {
         let mut rec_new = StringRecord::new();
-        for (idx,each) in rec.iter().enumerate() {
+        for (idx, each) in rec.iter().enumerate() {
             if invert {
-                if col_index.contains(&(idx+1)) {
+                if col_index.contains(&(idx + 1)) {
                     rec_new.push_field(each);
                 }
             } else {
-                if !col_index.contains(&(idx+1)) {
+                if !col_index.contains(&(idx + 1)) {
                     rec_new.push_field(each);
                 }
             }

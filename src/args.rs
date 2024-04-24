@@ -6,12 +6,12 @@ use clap::{value_parser, Parser};
 #[command(
     name = "xtab",
     author = "sharkLoc",
-    version = "0.0.2",
+    version = "0.0.3",
     next_line_help = false,
-    about = "CSV command line utilities"
+    about = "CSV command line utilities",
+    long_about = "A simple and cross-platform program for CSV file manipulation"
 )]
 #[command(propagate_version = false, disable_help_flag = false, disable_version_flag = true)]
-#[command(long_about = "A simple and cross-platform program for CSV file manipulation")]
 #[command(before_help=r"xtab supports reading and writing gzip/bzip2/xz format file.
 Compression level:
   format   range   default   crate
@@ -19,8 +19,8 @@ Compression level:
   bzip2    1-9     6         https://crates.io/crates/bzip2
   xz       1-9     6         https://crates.io/crates/xz2"
 )]
-#[command(help_template = "{name} -- {about}\nVersion: {version}\
-    \n\nAuthors: {author} <mmtinfo@163.com>\
+#[command(help_template = "{name} -- {about}\n\nVersion: {version}\
+    \nAuthors: {author} <mmtinfo@163.com>\
     \nSource code: https://github.com/sharkLoc/xtab.git\
     \n\n{before-help}
 {usage-heading} {usage}\n\n{all-args}\n\nUse \"xtab help [command]\" for more information about a command")]
@@ -78,6 +78,19 @@ pub enum Cmd {
         output: Option<PathBuf>,
     },
 
+    /// Convert CSV/TSV files to XLSX file
+    #[command(visible_alias = "c2x")]
+    csv2xlsx {
+        /// If set, bold first line in XLSX file
+        #[arg(short = 'B', long = "bold-first", help_heading = Some("FLAGS"))]
+        bold: bool,
+        /// If set, border first line in XLSX file
+        #[arg(short = 'b', long = "border-first", help_heading = Some("FLAGS"))]
+        border: bool,
+        /// Output xlsx file name, e.g, result.xlsx
+        #[arg(short = 'x', long = "xlsx", value_name = "FILE", default_value_t = String::from("Sheet1.xlsx"))]
+        xlsx: String,
+    },
     /// Dimensions of CSV file
     dim {
         /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
@@ -164,6 +177,20 @@ pub enum Cmd {
         /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
         #[arg(short = 'o', long = "out", value_name = "FILE")]
         output: Option<PathBuf>,
+    },
+
+    /// Convert XLSX to CSV format
+    #[command(visible_alias = "x2c")]
+    xlsx2csv {
+        /// Input XLSX file
+        #[arg(value_name = "FILE")]
+        xlsx: Option<PathBuf>,
+        /// Select Nth sheet to retrieve
+        #[arg(short = 'i', long = "sheet-index", value_name = "INT", default_value_t=1)]
+        idx: usize,
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out-csv", value_name = "FILE")]
+        csv: Option<PathBuf>,
     },
 
     /// Show CSV file content

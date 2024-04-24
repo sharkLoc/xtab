@@ -30,7 +30,7 @@ pub fn uniq_csv(
     for idx in index_str.split(',').collect::<Vec<&str>>() {
         let idx = idx.parse::<usize>()?;
         if col_index.contains(&idx) {
-            warn!("duplicate columns index {}, keep first one",idx);
+            warn!("duplicate columns index {}, keep first one", idx);
             continue;
         } else {
             col_index.push(idx);
