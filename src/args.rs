@@ -36,10 +36,10 @@ pub struct Args {
     #[arg(short = 'H', long = "no-header", global = true, help_heading = Some("Global FLAGS"))]
     pub no_header: bool,
 
-    /// Set delimiter for input csv file, e.g., -d $'\t' for tab
+    /// Set delimiter for input csv file, e.g., in linux -d $'\t' for tab, in powershell -d `t for tab 
     #[arg(short = 'd', long = "delimiter", default_value_t = ',', global = true, value_name = "CHAR", help_heading = Some("Global Arguments"))]
     pub delimiter: char,
-    /// Set delimiter for output CSV file, e.g., -D $'\t' for tab
+    /// Set delimiter for output CSV file, e.g., in linux -D $'\t' for tab, in powershell -D `t for tab
     #[arg(short = 'D', long = "out-delimite", default_value_t = ',', global = true, value_name = "CHAR", help_heading = Some("Global Arguments"))]
     pub out_delimite: char,
 
