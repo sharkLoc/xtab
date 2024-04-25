@@ -43,9 +43,14 @@ Commands:
   csv2xlsx   Convert CSV/TSV files to XLSX file [aliases: c2x]
   dim        Dimensions of CSV file
   drop       Drop or Select CSV fields by columns index
-  freq       freq
+  flatten    flattened view of CSV records [aliases: flat]
+  freq       Build frequency table of selected column in CSV data
   head       Print first N records from CSV file
   pretty     Convert CSV to a readable aligned table
+  reverse    Reverses rows of CSV data [aliases: rev]
+  sample     Randomly select rows from CSV file using reservoir sampling
+  search     Applies the regex to each field individually and shows only matching rows
+  slice      Slice rows from a part of a CSV file
   tail       Print last N records from CSV file
   uniq       Unique data with keys
   xlsx2csv   Convert XLSX to CSV format [aliases: x2c]
