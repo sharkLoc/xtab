@@ -30,3 +30,6 @@ rand_pcg = "0.3.1"
 regex = "1.10.4"
 rust_xlsxwriter = "0.64.2"
 xz2 = "0.1.7"
+
+[profile.release]
+strip = true
