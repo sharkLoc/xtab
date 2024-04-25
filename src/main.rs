@@ -7,7 +7,7 @@ mod command;
 mod utils;
 
 use command::{
-    addheader::addheader_csv, csv2xlsx::csv_xlsx, dim::dim_csv, drop::drop_csv, freq::freq_csv, head::head_csv, pretty::pretty_csv, tail::tail_csv, uniq::uniq_csv, view::view_csv, xlsx2csv::xlsx_csv
+    addheader::addheader_csv, csv2xlsx::csv_xlsx, dim::dim_csv, drop::drop_csv, flatten::flatten_csv, freq::freq_csv, head::head_csv, pretty::pretty_csv, reverse::reverse_csv, sample::sample_csv, search::search_csv, slice::slice_csv, tail::tail_csv, uniq::uniq_csv, view::view_csv, xlsx2csv::xlsx_csv
 };
 
 
@@ -50,6 +50,21 @@ fn main() -> Result<(), Error>{
         }
         args::Cmd::xlsx2csv { xlsx, idx, csv }=> {
             xlsx_csv(xlsx, idx, cmd.out_delimite as u8, csv, cmd.compression_level)?;
+        }
+        args::Cmd::flatten {separator, output } => {
+            flatten_csv(cmd.no_header, cmd.delimiter as u8, cmd.out_delimite as u8, separator, cmd.input, output, cmd.compression_level)?;
+        }
+        args::Cmd::slice { skip, len, pre_num, raw_order, output } => {
+            slice_csv(cmd.no_header, cmd.delimiter as u8, cmd.out_delimite as u8, skip, len, pre_num, raw_order, cmd.input, output, cmd.compression_level)?;
+        }
+        args::Cmd::reverse { output } => {
+            reverse_csv(cmd.no_header, cmd.delimiter as u8, cmd.out_delimite as u8, cmd.input, output, cmd.compression_level)?;
+        }
+        args::Cmd::sample { num, seed, output } => {
+            sample_csv(cmd.no_header, cmd.delimiter as u8, cmd.out_delimite as u8, num, seed, cmd.input, output, cmd.compression_level)?;
+        }
+        args::Cmd::search { pat, case, invert, output } => {
+            search_csv(cmd.no_header, cmd.delimiter as u8, cmd.out_delimite as u8, case, invert, &pat, cmd.input, output, cmd.compression_level)?;
         }
     }
 

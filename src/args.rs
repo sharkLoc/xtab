@@ -28,7 +28,7 @@ pub struct Args {
     #[clap(subcommand)]
     pub cmd: Cmd,
 
-    /// Input csv file name, if file not specified read data from stdin
+    /// Input CSV file name, if file not specified read data from stdin
     #[arg(value_name = "CSV", global = true, help_heading = Some("Global Arguments"))]
     pub input: Option<PathBuf>,
 
@@ -111,7 +111,18 @@ pub enum Cmd {
         output: Option<PathBuf>,
     },
 
-    /// freq
+    ///  flattened view of CSV records
+    #[command(visible_alias = "flat")]
+    flatten {
+        /// If enabled, specify characters to write after each record. e.g, "#"
+        #[arg(short = 's', long = "separator", value_name = "CHAR")]
+        separator: Option<char>,
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
+    },
+
+    /// Build frequency table of selected column in CSV data
     freq {
         /// Select columns index, e.g -c 2,3,5
         #[arg(short = 'c', long = "col-index", value_name = "STR", default_value_t = String::from("1"))]
@@ -154,6 +165,62 @@ pub enum Cmd {
         /// Show header in different style
         #[arg(long = "header", help_heading = Some("FLAGS"))]
         header: bool,
+    },
+
+    /// Reverses rows of CSV data
+    #[command(visible_alias = "rev")]
+    reverse {
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
+    },
+
+    /// Randomly select rows from CSV file using reservoir sampling
+    sample {
+        /// Set subset number
+        #[arg(short = 'n', long = "num", value_name = "INT", default_value_t = 10)]
+        num: usize,
+        /// Set rand seed
+        #[arg(short = 's', long = "seed", value_name = "INT", default_value_t = 11)]
+        seed: u64,
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
+    },
+
+    /// Applies the regex to each field individually and shows only matching rows.
+    search {
+        /// Set regex pattern. e.g, "-r \d+"
+        #[arg(short = 'r', long = "re", value_name = "STR")]
+        pat: String,
+        /// If specified, enable case insensitive matching for the entire pattern
+        #[arg(short = 'i', long = "ignore-case", help_heading = Some("FLAGS"))]
+        case: bool,
+        /// invert the sense of matching, to select non-matching rows
+        #[arg(short = 'u', long = "invert-match", help_heading = Some("FLAGS"))]
+        invert: bool,
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
+    },
+
+    /// Slice rows from a part of a CSV file
+    slice {
+        /// Skip first int records
+        #[arg(short = 's', long = "skip", value_name = "INT", default_value_t = 0)]
+        skip: usize,
+        /// The length of the slice
+        #[arg(short = 'l', long = "len", value_name = "INT", default_value_t = 10)]
+        len: usize,
+        /// If set, show prefix number in output, start from 1
+        #[arg(long = "num", help_heading = Some("FLAGS"))]
+        pre_num: bool,
+        /// If set, show raw order number in output
+        #[arg(long = "raw", help_heading = Some("FLAGS"))]
+        raw_order: bool,
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
     },
 
     /// Print last N records from CSV file

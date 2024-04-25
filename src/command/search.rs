@@ -1,21 +1,27 @@
 use crate::utils::*;
 use anyhow::{Error, Ok};
-use csv::{ReaderBuilder, StringRecord, WriterBuilder};
 use log::*;
+use regex::RegexBuilder;
 use std::{path::PathBuf, time::Instant};
+use csv::{ReaderBuilder, WriterBuilder};
 
-pub fn drop_csv(
+
+pub fn search_csv(
     no_header: bool,
     delimiter: u8,
     out_delimiter: u8,
-    index_str: String,
+    case: bool,
     invert: bool,
+    pat: &str,
     csv: Option<PathBuf>,
     csvo: Option<PathBuf>,
     compression_level: u32,
-) -> Result<(), Error> {
+) -> Result<(),Error> {
     let start = Instant::now();
-
+    let re = RegexBuilder::new(pat)
+            .case_insensitive(case)
+            .build()?;
+    
     let mut csv_reader = ReaderBuilder::new()
         .has_headers(no_header)
         .flexible(true)
@@ -27,41 +33,32 @@ pub fn drop_csv(
         None => info!("read file from stdin "),
     }
 
-    let mut col_index = vec![];
-    for idx in index_str.split(',').collect::<Vec<&str>>() {
-        let idx = idx.parse::<usize>()?;
-        if col_index.contains(&idx) {
-            warn!("duplicate columns index {}, keep first one", idx);
-            continue;
-        } else {
-            col_index.push(idx);
-        }
-        if idx == 0 {
-            error!("col_index error : {}, start from 1", idx);
-            std::process::exit(1);
-        }
-    }
-
     let mut csv_writer = WriterBuilder::new()
         .has_headers(no_header)
         .delimiter(out_delimiter)
         .from_writer(file_writer(csvo.as_ref(), compression_level)?);
 
-    let mut rec_new = StringRecord::new();
+    let mut flag = false;
     for rec in csv_reader.records().flatten() {
-        for (idx, each) in rec.iter().enumerate() {
-            if invert {
-                if col_index.contains(&(idx + 1)) {
-                    rec_new.push_field(each);
-                }
-            } else {
-                if !col_index.contains(&(idx + 1)) {
-                    rec_new.push_field(each);
-                }
+        for each in rec.iter() {
+            if re.is_match(each) {
+                flag = true;
+                continue;
             }
         }
-        csv_writer.write_record(&rec_new)?;
-        rec_new.clear();
+        if flag {
+            if invert {
+                flag = false;
+                continue;
+            } else {
+                csv_writer.write_record(&rec)?;
+                flag = false;
+            }
+        } else {
+            if invert {
+                csv_writer.write_record(&rec)?;
+            }
+        }
     }
     csv_writer.flush()?;
 

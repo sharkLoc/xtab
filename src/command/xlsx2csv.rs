@@ -39,8 +39,8 @@ pub fn xlsx_csv(
 
     if let Some(tab) = sheet {
         let df = tab?;
+        let mut rec = StringRecord::new();
         for row in df.rows() {
-            let mut rec = StringRecord::new();
             for col in row.iter() {
                 if let Some(v) = col.as_string() {
                     rec.push_field(&v);
@@ -49,6 +49,7 @@ pub fn xlsx_csv(
                 }
             }
             csv_writer.write_record(&rec)?;
+            rec.clear();
         }
     }
     csv_writer.flush()?;

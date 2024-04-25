@@ -80,16 +80,17 @@ pub fn freq_csv(
             count.sort_by(|x, y| x.0.cmp(y.0));
         }
 
+        let mut rec_new = StringRecord::new();
         for (k, v) in count {
             let mut tmp_keys = k.split(',').collect::<Vec<&str>>();
             tmp_keys.retain(|&x| x != ""); // strip last "" in tmp_keys
 
-            let mut rec_new = StringRecord::new();
             for each in tmp_keys {
                 rec_new.push_field(each);
             }
             rec_new.push_field(&v.to_string());
             csv_writer.write_record(&rec_new)?;
+            rec_new.clear();
         }
     } else if sort_value {
         let mut count = hash.iter().collect::<Vec<(&String, &usize)>>();
@@ -99,30 +100,31 @@ pub fn freq_csv(
             count.sort_by(|x, y| x.1.cmp(y.1));
         }
 
+        let mut rec_new = StringRecord::new();
         for (k, v) in count {
             let mut tmp_keys = k.split(',').collect::<Vec<&str>>();
             tmp_keys.retain(|&x| x != ""); // strip last "" in tmp_keys
 
-            let mut rec_new = StringRecord::new();
             for each in tmp_keys {
                 rec_new.push_field(each);
             }
             rec_new.push_field(&v.to_string());
             csv_writer.write_record(&rec_new)?;
+            rec_new.clear();
         }
     } else {
+        let mut rec_new = StringRecord::new();
         for k in raw_order.iter() {
             let mut tmp_keys = k.split(',').collect::<Vec<&str>>();
             tmp_keys.retain(|&x| x != ""); // strip last "" in tmp_keys
 
-            let mut rec_new = StringRecord::new();
             for each in tmp_keys {
                 rec_new.push_field(each);
             }
             let v = hash.get(k).unwrap();
             rec_new.push_field(&v.to_string());
-
             csv_writer.write_record(&rec_new)?;
+            rec_new.clear();
         }
     }
     csv_writer.flush()?;

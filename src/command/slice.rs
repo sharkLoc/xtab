@@ -4,12 +4,14 @@ use csv::{ReaderBuilder, StringRecord, WriterBuilder};
 use log::*;
 use std::{path::PathBuf, time::Instant};
 
-pub fn drop_csv(
+pub fn slice_csv(
     no_header: bool,
     delimiter: u8,
     out_delimiter: u8,
-    index_str: String,
-    invert: bool,
+    skip: usize,
+    take: usize,
+    prefix_num: bool,
+    raw_order: bool,
     csv: Option<PathBuf>,
     csvo: Option<PathBuf>,
     compression_level: u32,
@@ -22,24 +24,20 @@ pub fn drop_csv(
         .delimiter(delimiter)
         .from_reader(file_reader(csv.as_ref())?);
 
+    let mut flag = 0usize;
+    if prefix_num {
+        flag += 1;
+    }
+    if raw_order {
+        flag += 1;
+    }
+    if flag > 1 {
+        error!("only one of the flags --num or --raw is allowed");
+        std::process::exit(1);
+    }
     match csv {
         Some(csv) => info!("read file from: {:?}", csv),
         None => info!("read file from stdin "),
-    }
-
-    let mut col_index = vec![];
-    for idx in index_str.split(',').collect::<Vec<&str>>() {
-        let idx = idx.parse::<usize>()?;
-        if col_index.contains(&idx) {
-            warn!("duplicate columns index {}, keep first one", idx);
-            continue;
-        } else {
-            col_index.push(idx);
-        }
-        if idx == 0 {
-            error!("col_index error : {}, start from 1", idx);
-            std::process::exit(1);
-        }
     }
 
     let mut csv_writer = WriterBuilder::new()
@@ -48,20 +46,22 @@ pub fn drop_csv(
         .from_writer(file_writer(csvo.as_ref(), compression_level)?);
 
     let mut rec_new = StringRecord::new();
-    for rec in csv_reader.records().flatten() {
-        for (idx, each) in rec.iter().enumerate() {
-            if invert {
-                if col_index.contains(&(idx + 1)) {
-                    rec_new.push_field(each);
-                }
-            } else {
-                if !col_index.contains(&(idx + 1)) {
-                    rec_new.push_field(each);
-                }
+    let mut preid = 0usize;
+    if raw_order {
+        preid += skip;
+    }
+    for rec in csv_reader.records().skip(skip).take(take).flatten() {
+        if prefix_num || raw_order {
+            preid += 1;
+            rec_new.push_field(&preid.to_string());
+            for each in rec.iter() {
+                rec_new.push_field(each);
             }
+            csv_writer.write_record(&rec_new)?;
+            rec_new.clear();
+        } else {
+            csv_writer.write_record(&rec)?;
         }
-        csv_writer.write_record(&rec_new)?;
-        rec_new.clear();
     }
     csv_writer.flush()?;
 
