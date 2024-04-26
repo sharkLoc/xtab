@@ -6,7 +6,7 @@ use clap::{value_parser, Parser};
 #[command(
     name = "xtab",
     author = "sharkLoc",
-    version = "0.0.4",
+    version = "0.0.5",
     next_line_help = false,
     about = "CSV command line utilities",
     long_about = "A simple and cross-platform program for CSV file manipulation"
@@ -152,6 +152,7 @@ pub enum Cmd {
     },
 
     /// Convert CSV to a readable aligned table
+    #[command(visible_alias = "prt")]
     pretty {
         /// Set the whole table width
         #[arg(short = 'w', long = "width-table", value_name = "INT", value_parser = value_parser!(u16).range(0..=65535))]
@@ -165,6 +166,25 @@ pub enum Cmd {
         /// Show header in different style
         #[arg(long = "header", help_heading = Some("FLAGS"))]
         header: bool,
+    },
+
+    /// Replace data of matched fields
+    replace {
+        /// Select columns index, e.g -c 2,3,5
+        #[arg(short = 'c', long = "col-index", value_name = "STR", default_value_t = String::from("1"))]
+        col_index: String,
+        /// Raw cell content 
+        #[arg(short = 's', long = "src", value_name = "STR")]
+        src: String,
+        /// New cell content 
+        #[arg(short = 'd', long = "dst", value_name = "STR")]
+        dst: String,
+        /// If set, replace data in whole CSV file, overwrite option -c
+        #[arg(short = 'a', long = "all", help_heading = Some("FLAGS"))]
+        all: bool,
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
     },
 
     /// Reverses rows of CSV data
@@ -231,6 +251,14 @@ pub enum Cmd {
         /// Output reversed result
         #[arg(short = 'r', long = "reverse", help_heading = Some("FLAGS"))]
         rev: bool,
+        /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
+        #[arg(short = 'o', long = "out", value_name = "FILE")]
+        output: Option<PathBuf>,
+    },
+
+    /// Transpose CSV data
+    #[command(visible_alias = "trans")]
+    transpose {
         /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
         #[arg(short = 'o', long = "out", value_name = "FILE")]
         output: Option<PathBuf>,

@@ -7,7 +7,7 @@ mod command;
 mod utils;
 
 use command::{
-    addheader::addheader_csv, csv2xlsx::csv_xlsx, dim::dim_csv, drop::drop_csv, flatten::flatten_csv, freq::freq_csv, head::head_csv, pretty::pretty_csv, reverse::reverse_csv, sample::sample_csv, search::search_csv, slice::slice_csv, tail::tail_csv, uniq::uniq_csv, view::view_csv, xlsx2csv::xlsx_csv
+    addheader::addheader_csv, csv2xlsx::csv_xlsx, dim::dim_csv, drop::drop_csv, flatten::flatten_csv, freq::freq_csv, head::head_csv, pretty::pretty_csv, replace::replace_csv, reverse::reverse_csv, sample::sample_csv, search::search_csv, slice::slice_csv, tail::tail_csv, transpose::transpose_csv, uniq::uniq_csv, view::view_csv, xlsx2csv::xlsx_csv
 };
 
 
@@ -65,6 +65,12 @@ fn main() -> Result<(), Error>{
         }
         args::Cmd::search { pat, case, invert, output } => {
             search_csv(cmd.no_header, cmd.delimiter as u8, cmd.out_delimite as u8, case, invert, &pat, cmd.input, output, cmd.compression_level)?;
+        }
+        args::Cmd::transpose { output } => {
+            transpose_csv(cmd.no_header, cmd.delimiter as u8, cmd.out_delimite as u8, cmd.input, output, cmd.compression_level)?;
+        }
+        args::Cmd::replace { col_index, src, dst, all, output } => {
+            replace_csv(cmd.no_header, cmd.delimiter as u8, cmd.out_delimite as u8, &col_index, &src, &dst, all, cmd.input, output, cmd.compression_level)?;
         }
     }
 
