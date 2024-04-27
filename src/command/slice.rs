@@ -36,7 +36,7 @@ pub fn slice_csv(
         std::process::exit(1);
     }
     match csv {
-        Some(csv) => info!("read file from: {:?}", csv),
+        Some(csv) => info!("read file from: {}", csv.display()),
         None => info!("read file from stdin "),
     }
 

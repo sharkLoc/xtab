@@ -23,7 +23,7 @@ pub fn view_csv(
         .from_reader(file_reader(csv.as_ref())?);
 
     match csv {
-        Some(csv) => info!("read file from: {:?}", csv),
+        Some(csv) => info!("read file from: {}", csv.display()),
         None => info!("read file from stdin "),
     }
 

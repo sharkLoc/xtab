@@ -20,7 +20,7 @@ pub fn dim_csv(
         .from_reader(file_reader(csv.as_ref())?);
 
     match &csv {
-        Some(csv) => info!("read file from: {:?}", csv),
+        Some(csv) => info!("read file from: {}", csv.display()),
         None => info!("read file from stdin "),
     }
 
@@ -41,7 +41,7 @@ pub fn dim_csv(
     let mut out_writer = file_writer(csvo.as_ref(), compression_level)?;
 
     let buf = if let Some(file) = csv {
-        format!("file\trows\tcols\n{:?}\t{}\t{}\n", file, row, col.unwrap())
+        format!("file\trows\tcols\n{}\t{}\t{}\n", file.display(), row, col.unwrap())
     } else {
         format!("file\trows\tcols\n-\t{}\t{}\n", row, col.unwrap())
     };

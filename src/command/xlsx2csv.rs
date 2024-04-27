@@ -15,7 +15,7 @@ pub fn xlsx_csv(
     let start = Instant::now();
 
     match &xlsx {
-        Some(x) => info!("read file from: {:?}", x),
+        Some(x) => info!("read file from: {}", x.display()),
         None => {
             error!("xlsx file not provided");
             std::process::exit(1);

@@ -6,7 +6,7 @@ use clap::{value_parser, Parser};
 #[command(
     name = "xtab",
     author = "sharkLoc",
-    version = "0.0.5",
+    version = "0.0.6",
     next_line_help = false,
     about = "CSV command line utilities",
     long_about = "A simple and cross-platform program for CSV file manipulation"
