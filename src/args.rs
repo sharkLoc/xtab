@@ -1,17 +1,17 @@
 use std::path::PathBuf;
-use clap::{value_parser, Parser};
+use clap::{ArgAction, value_parser, Parser};
 
 
 #[derive(Debug, Parser)]
 #[command(
     name = "xtab",
     author = "sharkLoc",
-    version = "0.0.6",
+    version = "0.0.7",
     next_line_help = false,
     about = "CSV command line utilities",
     long_about = "A simple and cross-platform program for CSV file manipulation"
 )]
-#[command(propagate_version = false, disable_help_flag = false, disable_version_flag = true)]
+#[command(propagate_version = true, disable_help_flag = true, disable_version_flag = true)]
 #[command(before_help=r"xtab supports reading and writing gzip/bzip2/xz format file.
 Compression level:
   format   range   default   crate
@@ -62,6 +62,14 @@ pub struct Args {
     /// Be quiet and do not show any extra information
     #[arg(short = 'q', long = "quiet", global= true, help_heading = Some("Global FLAGS"))]
     pub quiet: bool,
+
+    /// prints help information
+    #[arg(short = 'h', long, action = ArgAction::Help, global= true, help_heading = Some("Global FLAGS"))]
+    pub help: Option<String>,
+
+    /// prints version information
+    #[arg(short = 'V', long, action = ArgAction::Version, global= true, help_heading = Some("Global FLAGS"))]
+    pub version: Option<String>,
 }
 
 #[derive(Debug, Parser)]

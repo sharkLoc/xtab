@@ -1,6 +1,6 @@
 [package]
 name = "xtab"
-version = "0.0.6"
+version = "0.0.7"
 authors = ["sharkLoc <mmtinfo@163.com>"]
 edition = "2021"
 homepage = "https://github.com/sharkLoc/xtab"
@@ -29,6 +29,7 @@ rand = "0.8.5"
 rand_pcg = "0.3.1"
 regex = "1.10.4"
 rust_xlsxwriter = "0.64.2"
+thiserror = "1.0.60"
 xz2 = "0.1.7"
 
 [profile.release]

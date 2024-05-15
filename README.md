@@ -23,7 +23,7 @@ cargo b --release
 
 ```bash
 xtab -- CSV command line utilities
-Version: 0.0.6
+Version: 0.0.7
 
 Authors: sharkLoc <mmtinfo@163.com>
 Source code: https://github.com/sharkLoc/xtab.git
@@ -59,9 +59,6 @@ Commands:
   view       Show CSV file content
   help       Print this message or the help of the given subcommand(s)
 
-Options:
-  -h, --help  Print help (see more with '--help')
-
 Global Arguments:
   -d, --delimiter <CHAR>      Set delimiter for input csv file, e.g., in linux -d $'\t' for tab, in powershell -d `t for tab [default: ,]
   -D, --out-delimite <CHAR>   Set delimiter for output CSV file, e.g., in linux -D $'\t' for tab, in powershell -D `t for tab [default: ,]
@@ -73,6 +70,8 @@ Global Arguments:
 Global FLAGS:
   -H, --no-header  If set, the first row is treated as a special header row, and the original header row excluded from output
   -q, --quiet      Be quiet and do not show any extra information
+  -h, --help       prints help information
+  -V, --version    prints version information
 
 Use "xtab help [command]" for more information about a command
 ```
