@@ -4,7 +4,6 @@ use csv::{ReaderBuilder, StringRecord, WriterBuilder};
 use log::*;
 use std::{collections::HashMap, path::PathBuf, time::Instant};
 
-
 pub fn transpose_csv(
     no_header: bool,
     delimiter: u8,

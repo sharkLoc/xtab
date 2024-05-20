@@ -41,7 +41,12 @@ pub fn dim_csv(
     let mut out_writer = file_writer(csvo.as_ref(), compression_level)?;
 
     let buf = if let Some(file) = csv {
-        format!("file\trows\tcols\n{}\t{}\t{}\n", file.display(), row, col.unwrap())
+        format!(
+            "file\trows\tcols\n{}\t{}\t{}\n",
+            file.display(),
+            row,
+            col.unwrap()
+        )
     } else {
         format!("file\trows\tcols\n-\t{}\t{}\n", row, col.unwrap())
     };

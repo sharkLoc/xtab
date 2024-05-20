@@ -4,7 +4,6 @@ use csv::{ReaderBuilder, StringRecord, WriterBuilder};
 use log::*;
 use std::{path::PathBuf, time::Instant};
 
-
 pub fn replace_csv(
     no_header: bool,
     delimiter: u8,
@@ -53,7 +52,7 @@ pub fn replace_csv(
     let mut rec_new = StringRecord::new();
     let mut count = 0usize;
     for rec in csv_reader.records().flatten() {
-        for (idx,each) in rec.iter().enumerate() {
+        for (idx, each) in rec.iter().enumerate() {
             if all {
                 if each == src {
                     rec_new.push_field(dst);
@@ -78,7 +77,7 @@ pub fn replace_csv(
         rec_new.clear();
     }
     csv_writer.flush()?;
-    
+
     info!("total replace cell count: {}", count);
     info!("time elapsed is: {:?}", start.elapsed());
     Ok(())

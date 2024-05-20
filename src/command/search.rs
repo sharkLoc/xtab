@@ -1,10 +1,9 @@
 use crate::utils::*;
 use anyhow::{Error, Ok};
+use csv::{ReaderBuilder, WriterBuilder};
 use log::*;
 use regex::RegexBuilder;
 use std::{path::PathBuf, time::Instant};
-use csv::{ReaderBuilder, WriterBuilder};
-
 
 pub fn search_csv(
     no_header: bool,
@@ -16,12 +15,10 @@ pub fn search_csv(
     csv: Option<PathBuf>,
     csvo: Option<PathBuf>,
     compression_level: u32,
-) -> Result<(),Error> {
+) -> Result<(), Error> {
     let start = Instant::now();
-    let re = RegexBuilder::new(pat)
-            .case_insensitive(case)
-            .build()?;
-    
+    let re = RegexBuilder::new(pat).case_insensitive(case).build()?;
+
     let mut csv_reader = ReaderBuilder::new()
         .has_headers(no_header)
         .flexible(true)

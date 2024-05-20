@@ -1,6 +1,5 @@
+use clap::{value_parser, ArgAction, Parser};
 use std::path::PathBuf;
-use clap::{ArgAction, value_parser, Parser};
-
 
 #[derive(Debug, Parser)]
 #[command(
@@ -11,8 +10,13 @@ use clap::{ArgAction, value_parser, Parser};
     about = "CSV command line utilities",
     long_about = "A simple and cross-platform program for CSV file manipulation"
 )]
-#[command(propagate_version = true, disable_help_flag = true, disable_version_flag = true)]
-#[command(before_help=r"xtab supports reading and writing gzip/bzip2/xz format file.
+#[command(
+    propagate_version = true,
+    disable_help_flag = true,
+    disable_version_flag = true
+)]
+#[command(
+    before_help = r"xtab supports reading and writing gzip/bzip2/xz format file.
 Compression level:
   format   range   default   crate
   gzip     1-9     6         https://crates.io/crates/flate2
@@ -36,7 +40,7 @@ pub struct Args {
     #[arg(short = 'H', long = "no-header", global = true, help_heading = Some("Global FLAGS"))]
     pub no_header: bool,
 
-    /// Set delimiter for input csv file, e.g., in linux -d $'\t' for tab, in powershell -d `t for tab 
+    /// Set delimiter for input csv file, e.g., in linux -d $'\t' for tab, in powershell -d `t for tab
     #[arg(short = 'd', long = "delimiter", default_value_t = ',', global = true, value_name = "CHAR", help_heading = Some("Global Arguments"))]
     pub delimiter: char,
     /// Set delimiter for output CSV file, e.g., in linux -D $'\t' for tab, in powershell -D `t for tab
@@ -166,7 +170,7 @@ pub enum Cmd {
         #[arg(short = 'w', long = "width-table", value_name = "INT", value_parser = value_parser!(u16).range(0..=65535))]
         width_table: Option<u16>,
         /// If set, truncate content of cells which occupies more than INT lines of space
-        #[arg(short = 't', long="truncate", value_name = "INT")]
+        #[arg(short = 't', long = "truncate", value_name = "INT")]
         cell_height: Option<usize>,
         /// Set the alignment of content for each cell, possible values: {left, center, right}
         #[arg(short ='a', long = "aln", value_name = "STR", default_value_t = String::from("left"))]
@@ -181,10 +185,10 @@ pub enum Cmd {
         /// Select columns index, e.g -c 2,3,5
         #[arg(short = 'c', long = "col-index", value_name = "STR", default_value_t = String::from("1"))]
         col_index: String,
-        /// Raw cell content 
+        /// Raw cell content
         #[arg(short = 's', long = "src", value_name = "STR")]
         src: String,
-        /// New cell content 
+        /// New cell content
         #[arg(short = 'd', long = "dst", value_name = "STR")]
         dst: String,
         /// If set, replace data in whole CSV file, overwrite option -c
@@ -289,7 +293,12 @@ pub enum Cmd {
         #[arg(value_name = "FILE")]
         xlsx: Option<PathBuf>,
         /// Select Nth sheet to retrieve
-        #[arg(short = 'i', long = "sheet-index", value_name = "INT", default_value_t=1)]
+        #[arg(
+            short = 'i',
+            long = "sheet-index",
+            value_name = "INT",
+            default_value_t = 1
+        )]
         idx: usize,
         /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
         #[arg(short = 'o', long = "out-csv", value_name = "FILE")]
@@ -299,7 +308,7 @@ pub enum Cmd {
     /// Show CSV file content
     view {
         /// Skip first N records, not include the header row when option "--no-header" enabled. eg "-s 10 --no-header" will skip 11 records
-        #[arg(short = 's', long = "skip", value_name = "INT", default_value_t = 0 )]
+        #[arg(short = 's', long = "skip", value_name = "INT", default_value_t = 0)]
         skip: usize,
         /// If enabled, truncate each record to N fields, if N is greater than the number of fields in this record, then this has no effect
         #[arg(short = 't', long = "truncate", value_name = "INT")]

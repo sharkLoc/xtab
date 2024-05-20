@@ -8,7 +8,6 @@ use std::{
     path::Path,
 };
 
-
 pub fn logger<P: AsRef<Path>>(
     verbose: String,
     logfile: Option<P>,
