@@ -23,7 +23,7 @@ cargo b --release
 
 ```bash
 xtab -- CSV command line utilities
-Version: 0.0.7
+Version: 0.0.8
 
 Authors: sharkLoc <mmtinfo@163.com>
 Source code: https://github.com/sharkLoc/xtab.git
@@ -64,7 +64,7 @@ Global Arguments:
   -D, --out-delimite <CHAR>   Set delimiter for output CSV file, e.g., in linux -D $'\t' for tab, in powershell -D `t for tab [default: ,]
       --log <FILE>            If file name specified, write log message to this file, or write to stderr
       --compress-level <INT>  Set compression level 1 (compress faster) - 9 (compress better) for gzip/bzip2/xz output file, just work with option -o/--out [default: 6]
-  -v, --verbosity <STR>       Control verbosity of logging, possible values: {error, warn, info, debug, trace} [default: debug]
+  -v, --verbosity...          control verbosity of logging, [-v: Error, -vv: Warn, -vvv: Info, -vvvv: Debug, -vvvvv: Trace, defalut: Debug]
   [CSV]                   Input CSV file name, if file not specified read data from stdin
 
 Global FLAGS:

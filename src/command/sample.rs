@@ -6,6 +6,7 @@ use rand::{prelude::*, Rng};
 use rand_pcg::Pcg64;
 use std::{path::PathBuf, time::Instant};
 
+#[allow(clippy::too_many_arguments)]
 pub fn sample_csv(
     no_header: bool,
     delimiter: u8,

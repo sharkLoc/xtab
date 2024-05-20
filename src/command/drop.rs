@@ -4,6 +4,7 @@ use csv::{ReaderBuilder, StringRecord, WriterBuilder};
 use log::*;
 use std::{path::PathBuf, time::Instant};
 
+#[allow(clippy::too_many_arguments)]
 pub fn drop_csv(
     no_header: bool,
     delimiter: u8,
@@ -54,10 +55,8 @@ pub fn drop_csv(
                 if col_index.contains(&(idx + 1)) {
                     rec_new.push_field(each);
                 }
-            } else {
-                if !col_index.contains(&(idx + 1)) {
-                    rec_new.push_field(each);
-                }
+            } else if !col_index.contains(&(idx + 1)) {
+                rec_new.push_field(each);
             }
         }
         csv_writer.write_record(&rec_new)?;

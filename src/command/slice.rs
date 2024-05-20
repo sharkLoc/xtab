@@ -4,6 +4,7 @@ use csv::{ReaderBuilder, StringRecord, WriterBuilder};
 use log::*;
 use std::{path::PathBuf, time::Instant};
 
+#[allow(clippy::too_many_arguments)]
 pub fn slice_csv(
     no_header: bool,
     delimiter: u8,

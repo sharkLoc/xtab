@@ -5,7 +5,7 @@ use std::path::PathBuf;
 #[command(
     name = "xtab",
     author = "sharkLoc",
-    version = "0.0.7",
+    version = "0.0.8",
     next_line_help = false,
     about = "CSV command line utilities",
     long_about = "A simple and cross-platform program for CSV file manipulation"
@@ -57,11 +57,11 @@ pub struct Args {
     )]
     pub compression_level: u32,
 
-    /// Control verbosity of logging, possible values: {error, warn, info, debug, trace}
-    #[arg(short = 'v', long = "verbosity", global = true, value_name = "STR",
-        default_value_t = String::from("debug"), help_heading = Some("Global Arguments")
+    /// control verbosity of logging, [-v: Error, -vv: Warn, -vvv: Info, -vvvv: Debug, -vvvvv: Trace, defalut: Debug]
+    #[arg(short = 'v', long = "verbosity", action = ArgAction::Count, global = true,
+        default_value_t = 4, help_heading = Some("Global Arguments")
     )]
-    pub verbose: String,
+    pub verbose: u8,
 
     /// Be quiet and do not show any extra information
     #[arg(short = 'q', long = "quiet", global= true, help_heading = Some("Global FLAGS"))]
@@ -181,6 +181,7 @@ pub enum Cmd {
     },
 
     /// Replace data of matched fields
+    #[command(visible_alias = "rp")]
     replace {
         /// Select columns index, e.g -c 2,3,5
         #[arg(short = 'c', long = "col-index", value_name = "STR", default_value_t = String::from("1"))]
@@ -189,7 +190,7 @@ pub enum Cmd {
         #[arg(short = 's', long = "src", value_name = "STR")]
         src: String,
         /// New cell content
-        #[arg(short = 'd', long = "dst", value_name = "STR")]
+        #[arg(short = 'n', long = "dst", value_name = "STR")]
         dst: String,
         /// If set, replace data in whole CSV file, overwrite option -c
         #[arg(short = 'a', long = "all", help_heading = Some("FLAGS"))]

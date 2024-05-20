@@ -4,6 +4,7 @@ use csv::{ReaderBuilder, StringRecord, WriterBuilder};
 use log::*;
 use std::{collections::HashMap, path::PathBuf, time::Instant};
 
+#[allow(clippy::too_many_arguments)]
 pub fn freq_csv(
     no_header: bool,
     delimiter: u8,
@@ -83,7 +84,7 @@ pub fn freq_csv(
         let mut rec_new = StringRecord::new();
         for (k, v) in count {
             let mut tmp_keys = k.split(',').collect::<Vec<&str>>();
-            tmp_keys.retain(|&x| x != ""); // strip last "" in tmp_keys
+            tmp_keys.retain(|&x| !x.is_empty()); // strip last "" in tmp_keys
 
             for each in tmp_keys {
                 rec_new.push_field(each);
@@ -103,7 +104,7 @@ pub fn freq_csv(
         let mut rec_new = StringRecord::new();
         for (k, v) in count {
             let mut tmp_keys = k.split(',').collect::<Vec<&str>>();
-            tmp_keys.retain(|&x| x != ""); // strip last "" in tmp_keys
+            tmp_keys.retain(|&x| !x.is_empty()); // strip last "" in tmp_keys
 
             for each in tmp_keys {
                 rec_new.push_field(each);
@@ -116,7 +117,7 @@ pub fn freq_csv(
         let mut rec_new = StringRecord::new();
         for k in raw_order.iter() {
             let mut tmp_keys = k.split(',').collect::<Vec<&str>>();
-            tmp_keys.retain(|&x| x != ""); // strip last "" in tmp_keys
+            tmp_keys.retain(|&x| !x.is_empty()); // strip last "" in tmp_keys
 
             for each in tmp_keys {
                 rec_new.push_field(each);

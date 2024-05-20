@@ -5,6 +5,7 @@ use log::*;
 use regex::RegexBuilder;
 use std::{path::PathBuf, time::Instant};
 
+#[allow(clippy::too_many_arguments)]
 pub fn search_csv(
     no_header: bool,
     delimiter: u8,
@@ -51,10 +52,8 @@ pub fn search_csv(
                 csv_writer.write_record(&rec)?;
                 flag = false;
             }
-        } else {
-            if invert {
-                csv_writer.write_record(&rec)?;
-            }
+        } else if invert {
+            csv_writer.write_record(&rec)?;
         }
     }
     csv_writer.flush()?;

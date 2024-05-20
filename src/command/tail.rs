@@ -4,6 +4,7 @@ use csv::{ReaderBuilder, WriterBuilder};
 use log::*;
 use std::{path::PathBuf, time::Instant};
 
+#[allow(clippy::too_many_arguments)]
 pub fn tail_csv(
     no_header: bool,
     delimiter: u8,

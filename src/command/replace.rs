@@ -4,6 +4,7 @@ use csv::{ReaderBuilder, StringRecord, WriterBuilder};
 use log::*;
 use std::{path::PathBuf, time::Instant};
 
+#[allow(clippy::too_many_arguments)]
 pub fn replace_csv(
     no_header: bool,
     delimiter: u8,
@@ -53,7 +54,7 @@ pub fn replace_csv(
     let mut count = 0usize;
     for rec in csv_reader.records().flatten() {
         for (idx, each) in rec.iter().enumerate() {
-            if all {
+            if all || col_index.contains(&(idx + 1)) {
                 if each == src {
                     rec_new.push_field(dst);
                     count += 1;
@@ -61,16 +62,7 @@ pub fn replace_csv(
                     rec_new.push_field(each);
                 }
             } else {
-                if col_index.contains(&(idx + 1)) {
-                    if each == src {
-                        rec_new.push_field(dst);
-                        count += 1;
-                    } else {
-                        rec_new.push_field(each);
-                    }
-                } else {
-                    rec_new.push_field(each);
-                }
+                rec_new.push_field(each);
             }
         }
         csv_writer.write_record(&rec_new)?;
