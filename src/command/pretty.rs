@@ -3,7 +3,7 @@ use anyhow::{Error, Ok};
 use comfy_table::{modifiers::UTF8_ROUND_CORNERS, presets::UTF8_FULL, *};
 use csv::ReaderBuilder;
 use log::*;
-use std::{path::PathBuf, time::Instant};
+use std::path::PathBuf;
 
 pub fn pretty_csv(
     no_header: bool,
@@ -14,7 +14,6 @@ pub fn pretty_csv(
     header: bool,
     csv: Option<PathBuf>,
 ) -> Result<(), Error> {
-    let start = Instant::now();
 
     let mut csv_reader = ReaderBuilder::new()
         .has_headers(no_header)
@@ -67,6 +66,5 @@ pub fn pretty_csv(
     }
     println!("{}", table);
 
-    info!("time elapsed is: {:?}", start.elapsed());
     Ok(())
 }

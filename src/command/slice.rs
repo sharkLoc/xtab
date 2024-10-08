@@ -2,7 +2,7 @@ use crate::utils::*;
 use anyhow::{Error, Ok};
 use csv::{ReaderBuilder, StringRecord, WriterBuilder};
 use log::*;
-use std::{path::PathBuf, time::Instant};
+use std::path::PathBuf;
 
 #[allow(clippy::too_many_arguments)]
 pub fn slice_csv(
@@ -17,7 +17,6 @@ pub fn slice_csv(
     csvo: Option<PathBuf>,
     compression_level: u32,
 ) -> Result<(), Error> {
-    let start = Instant::now();
 
     let mut csv_reader = ReaderBuilder::new()
         .has_headers(no_header)
@@ -66,6 +65,5 @@ pub fn slice_csv(
     }
     csv_writer.flush()?;
 
-    info!("time elapsed is: {:?}", start.elapsed());
     Ok(())
 }

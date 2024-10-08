@@ -4,7 +4,7 @@ use csv::{ReaderBuilder, WriterBuilder};
 use log::*;
 use rand::{prelude::*, Rng};
 use rand_pcg::Pcg64;
-use std::{path::PathBuf, time::Instant};
+use std::path::PathBuf;
 
 #[allow(clippy::too_many_arguments)]
 pub fn sample_csv(
@@ -17,7 +17,6 @@ pub fn sample_csv(
     csvo: Option<PathBuf>,
     compression_level: u32,
 ) -> Result<(), Error> {
-    let start = Instant::now();
 
     let mut csv_reader = ReaderBuilder::new()
         .has_headers(no_header)
@@ -54,7 +53,6 @@ pub fn sample_csv(
         csv_writer.write_record(rec)?;
     }
     csv_writer.flush()?;
-    info!("time elapsed is: {:?}", start.elapsed());
 
     Ok(())
 }

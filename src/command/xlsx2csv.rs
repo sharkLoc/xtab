@@ -3,7 +3,7 @@ use anyhow::{Error, Ok};
 use calamine::{open_workbook, DataType, Reader, Xlsx};
 use csv::{StringRecord, WriterBuilder};
 use log::*;
-use std::{path::PathBuf, time::Instant};
+use std::path::PathBuf;
 
 pub fn xlsx_csv(
     xlsx: Option<PathBuf>,
@@ -12,7 +12,6 @@ pub fn xlsx_csv(
     csv: Option<PathBuf>,
     compression_level: u32,
 ) -> Result<(), Error> {
-    let start = Instant::now();
 
     match &xlsx {
         Some(x) => info!("read file from: {}", x.display()),
@@ -54,6 +53,5 @@ pub fn xlsx_csv(
     }
     csv_writer.flush()?;
 
-    info!("time elapsed is: {:?}", start.elapsed());
     Ok(())
 }

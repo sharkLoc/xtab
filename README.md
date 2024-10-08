@@ -1,14 +1,17 @@
 # xtab
+
 🦀 CSV command line utilities
 
-
 ## install
-##### setp1：install cargo first 
+
+##### setp1：install cargo first
+
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
 ##### step2:
+
 ```bash
 cargo install xtab
 # or
@@ -23,7 +26,7 @@ cargo b --release
 
 ```bash
 xtab -- CSV command line utilities
-Version: 0.0.8
+Version: 0.0.9
 
 Authors: sharkLoc <mmtinfo@163.com>
 Source code: https://github.com/sharkLoc/xtab.git

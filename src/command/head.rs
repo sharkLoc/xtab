@@ -2,7 +2,7 @@ use crate::utils::*;
 use anyhow::{Error, Ok};
 use csv::{ReaderBuilder, WriterBuilder};
 use log::*;
-use std::{path::PathBuf, time::Instant};
+use std::path::PathBuf;
 
 pub fn head_csv(
     no_header: bool,
@@ -13,7 +13,6 @@ pub fn head_csv(
     csvo: Option<PathBuf>,
     compression_level: u32,
 ) -> Result<(), Error> {
-    let start = Instant::now();
 
     let mut csv_reader = ReaderBuilder::new()
         .has_headers(no_header)
@@ -36,6 +35,5 @@ pub fn head_csv(
     }
     csv_writer.flush()?;
 
-    info!("time elapsed is: {:?}", start.elapsed());
     Ok(())
 }

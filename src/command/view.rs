@@ -2,7 +2,7 @@ use crate::utils::*;
 use anyhow::{Error, Ok};
 use csv::{ReaderBuilder, WriterBuilder};
 use log::info;
-use std::{path::PathBuf, time::Instant};
+use std::path::PathBuf;
 
 #[allow(clippy::too_many_arguments)]
 pub fn view_csv(
@@ -15,7 +15,6 @@ pub fn view_csv(
     csvo: Option<PathBuf>,
     compression_level: u32,
 ) -> Result<(), Error> {
-    let start = Instant::now();
 
     let mut csv_reader = ReaderBuilder::new()
         .has_headers(no_header)
@@ -43,6 +42,5 @@ pub fn view_csv(
     }
     csv_writer.flush()?;
 
-    info!("time elapsed is: {:?}", start.elapsed());
     Ok(())
 }

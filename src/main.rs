@@ -1,5 +1,6 @@
 use anyhow::{Error, Ok};
 use clap::Parser;
+use log::info;
 
 mod args;
 mod command;
@@ -17,6 +18,7 @@ use command::{
 fn main() -> Result<(), Error> {
     let cmd = args::Args::parse();
     loger::logger(cmd.verbose, cmd.logfile, cmd.quiet)?;
+    let start = std::time::Instant::now();
 
     match cmd.cmd {
         args::Cmd::view {
@@ -261,6 +263,8 @@ fn main() -> Result<(), Error> {
             )?;
         }
     }
+
+    info!("time elapsed is: {:?}", start.elapsed());
 
     Ok(())
 }

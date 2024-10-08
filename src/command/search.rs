@@ -3,7 +3,7 @@ use anyhow::{Error, Ok};
 use csv::{ReaderBuilder, WriterBuilder};
 use log::*;
 use regex::RegexBuilder;
-use std::{path::PathBuf, time::Instant};
+use std::path::PathBuf;
 
 #[allow(clippy::too_many_arguments)]
 pub fn search_csv(
@@ -17,7 +17,6 @@ pub fn search_csv(
     csvo: Option<PathBuf>,
     compression_level: u32,
 ) -> Result<(), Error> {
-    let start = Instant::now();
     let re = RegexBuilder::new(pat).case_insensitive(case).build()?;
 
     let mut csv_reader = ReaderBuilder::new()
@@ -58,6 +57,5 @@ pub fn search_csv(
     }
     csv_writer.flush()?;
 
-    info!("time elapsed is: {:?}", start.elapsed());
     Ok(())
 }

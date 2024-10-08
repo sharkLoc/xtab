@@ -3,7 +3,7 @@ use anyhow::{Error, Ok};
 use csv::ReaderBuilder;
 use log::info;
 use rust_xlsxwriter::{Format, FormatBorder, Workbook};
-use std::{path::PathBuf, time::Instant};
+use std::path::PathBuf;
 
 pub fn csv_xlsx(
     no_header: bool,
@@ -13,7 +13,6 @@ pub fn csv_xlsx(
     csv: Option<PathBuf>,
     xlsx: &str,
 ) -> Result<(), Error> {
-    let start = Instant::now();
 
     let mut csv_reader = ReaderBuilder::new()
         .has_headers(no_header)
@@ -47,6 +46,5 @@ pub fn csv_xlsx(
     }
     work_book.save(xlsx)?;
 
-    info!("time elapsed is: {:?}", start.elapsed());
     Ok(())
 }

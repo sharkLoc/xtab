@@ -1,12 +1,12 @@
 [package]
 name = "xtab"
-version = "0.0.8"
+version = "0.0.9"
 authors = ["sharkLoc <mmtinfo@163.com>"]
 edition = "2021"
 homepage = "https://github.com/sharkLoc/xtab"
 description = "xtab: CSV command line utilities"
 repository = "https://github.com/sharkLoc/xtab"
-keywords = ["csv","tsv"]
+keywords = ["csv","tsv","xlsx"]
 categories = ["command-line-utilities"]
 readme = "README.md"
 license = "MIT"
