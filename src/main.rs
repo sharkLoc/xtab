@@ -1,4 +1,5 @@
 use anyhow::{Error, Ok};
+use args::VERSION;
 use clap::Parser;
 use log::info;
 
@@ -18,6 +19,7 @@ use command::{
 fn main() -> Result<(), Error> {
     let cmd = args::Args::parse();
     loger::logger(cmd.verbose, cmd.logfile, cmd.quiet)?;
+    info!("xtab version: {}", VERSION);
     let start = std::time::Instant::now();
 
     match cmd.cmd {

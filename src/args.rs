@@ -1,11 +1,13 @@
 use clap::{value_parser, ArgAction, Parser};
 use std::path::PathBuf;
 
+pub const VERSION:&str = "0.0.9";
+
 #[derive(Debug, Parser)]
 #[command(
     name = "xtab",
     author = "sharkLoc",
-    version = "0.0.8",
+    version = VERSION,
     next_line_help = false,
     about = "CSV command line utilities",
     long_about = "A simple and cross-platform program for CSV file manipulation"
