@@ -35,7 +35,7 @@ pub fn xlsx_csv(
     let mut csv_writer = if tabout {
         WriterBuilder::new()
         .has_headers(true)
-        .delimiter('\t' as u8)
+        .delimiter(b'\t')
         .from_writer(file_writer(csv.as_ref(), compression_level)?)
     } else {
         WriterBuilder::new()

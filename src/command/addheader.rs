@@ -4,6 +4,7 @@ use csv::{ReaderBuilder, StringRecord, WriterBuilder};
 use log::info;
 use std::path::PathBuf;
 
+#[allow(clippy::too_many_arguments)]
 pub fn addheader_csv(
     new_header: String,
     delimiter: u8,
@@ -17,7 +18,7 @@ pub fn addheader_csv(
 
     let mut csv_reader =  if tabin {
         ReaderBuilder::new()
-        .delimiter('\t' as u8)
+        .delimiter(b'\t')
         .flexible(true)
         .has_headers(false)
         .from_reader(file_reader(csv.as_ref())?)
@@ -37,7 +38,7 @@ pub fn addheader_csv(
 
     let mut csv_writer =  if tabout {
         WriterBuilder::new()
-        .delimiter('\t' as u8)
+        .delimiter(b'\t')
         .from_writer(file_writer(csvo.as_ref(), compression_level)?)
     } else {
         WriterBuilder::new()

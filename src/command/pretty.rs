@@ -5,6 +5,7 @@ use csv::ReaderBuilder;
 use log::*;
 use std::path::PathBuf;
 
+#[allow(clippy::too_many_arguments)]
 pub fn pretty_csv(
     no_header: bool,
     delimiter: u8,
@@ -20,7 +21,7 @@ pub fn pretty_csv(
         ReaderBuilder::new()
         .has_headers(no_header)
         .flexible(true)
-        .delimiter('\t' as u8)
+        .delimiter(b'\t')
         .from_reader(file_reader(csv.as_ref())?)
     } else {
         ReaderBuilder::new()

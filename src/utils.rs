@@ -194,16 +194,16 @@ mod tests {
 
     #[test]
     fn gz_or_not() {
-        assert_eq!(is_gzipped("example/demo.csv.gz").unwrap(), true);
+        assert!(is_gzipped("example/demo.csv.gz").unwrap());
     }
 
     #[test]
     fn xz_or_not() {
-        assert_eq!(is_xz("example/demo.csv.xz").unwrap(), true);
+        assert!(is_xz("example/demo.csv.xz").unwrap());
     }
 
     #[test]
     fn bzip2_or_not() {
-        assert_eq!(is_bzipped("example/demo.csv.bz2").unwrap(), true);
+        assert!(is_bzipped("example/demo.csv.bz2").unwrap());
     }
 }

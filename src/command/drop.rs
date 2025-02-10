@@ -22,7 +22,7 @@ pub fn drop_csv(
         ReaderBuilder::new()
         .has_headers(no_header)
         .flexible(true)
-        .delimiter('\t' as u8)
+        .delimiter(b'\t')
         .from_reader(file_reader(csv.as_ref())?)
     } else {
         ReaderBuilder::new()
@@ -55,7 +55,7 @@ pub fn drop_csv(
     let mut csv_writer = if tabout {
         WriterBuilder::new()
         .has_headers(no_header)
-        .delimiter('\t' as u8)
+        .delimiter(b'\t')
         .from_writer(file_writer(csvo.as_ref(), compression_level)?)
     } else {
         WriterBuilder::new()

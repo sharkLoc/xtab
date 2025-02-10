@@ -19,7 +19,7 @@ pub fn csv_xlsx(
         ReaderBuilder::new()
         .has_headers(no_header)
         .flexible(true)
-        .delimiter('\t' as u8)
+        .delimiter(b'\t')
         .from_reader(file_reader(csv.as_ref())?)
     } else {
         ReaderBuilder::new()

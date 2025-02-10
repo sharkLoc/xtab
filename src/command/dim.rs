@@ -4,6 +4,7 @@ use csv::{ReaderBuilder,WriterBuilder,StringRecord};
 use log::*;
 use std::path::PathBuf;
 
+#[allow(clippy::too_many_arguments)]
 pub fn dim_csv(
     no_header: bool,
     delimiter: u8,
@@ -19,7 +20,7 @@ pub fn dim_csv(
         ReaderBuilder::new()
         .has_headers(no_header)
         .flexible(true)
-        .delimiter('\t' as u8)
+        .delimiter(b'\t')
         .from_reader(file_reader(csv.as_ref())?)
     } else {
         ReaderBuilder::new()
@@ -50,7 +51,7 @@ pub fn dim_csv(
 
     let mut csv_writer =  if tabout {
         WriterBuilder::new()
-        .delimiter('\t' as u8)
+        .delimiter(b'\t')
         .from_writer(file_writer(csvo.as_ref(), compression_level)?)
     } else {
         WriterBuilder::new()
