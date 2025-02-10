@@ -48,6 +48,12 @@ pub struct Args {
     /// Set delimiter for output CSV file, e.g., in linux -D $'\t' for tab, in powershell -D `t for tab
     #[arg(short = 'D', long = "out-delimite", default_value_t = ',', global = true, value_name = "CHAR", help_heading = Some("Global Arguments"))]
     pub out_delimite: char,
+    /// Specifies that the input CSV file is delimited with tabs. Overrides "-d"
+    #[arg(short = 't', long = "tabs", global = true, help_heading = Some("Global Arguments"))]
+    pub tabin: bool,
+    /// Specifies that the output is delimited with tabs. Overrides "-D"
+    #[arg(short = 'T', long = "out-tabs", global = true, help_heading = Some("Global Arguments"))]
+    pub tabout: bool,
 
     /// If file name specified, write log message to this file, or write to stderr
     #[arg(long = "log", global = true, help_heading = Some("Global Arguments"), value_name = "FILE")]
@@ -172,7 +178,7 @@ pub enum Cmd {
         #[arg(short = 'w', long = "width-table", value_name = "INT", value_parser = value_parser!(u16).range(0..=65535))]
         width_table: Option<u16>,
         /// If set, truncate content of cells which occupies more than INT lines of space
-        #[arg(short = 't', long = "truncate", value_name = "INT")]
+        #[arg(short = 'u', long = "truncate", value_name = "INT")]
         cell_height: Option<usize>,
         /// Set the alignment of content for each cell, possible values: {left, center, right}
         #[arg(short ='a', long = "aln", value_name = "STR", default_value_t = String::from("left"))]
@@ -314,7 +320,7 @@ pub enum Cmd {
         #[arg(short = 's', long = "skip", value_name = "INT", default_value_t = 0)]
         skip: usize,
         /// If enabled, truncate each record to N fields, if N is greater than the number of fields in this record, then this has no effect
-        #[arg(short = 't', long = "truncate", value_name = "INT")]
+        #[arg(short = 'u', long = "truncate", value_name = "INT")]
         truncate: Option<usize>,
         /// Output file name, file ending in .gz/.bz2/.xz will be compressed automatically, if file not specified write data to stdout
         #[arg(short = 'o', long = "out", value_name = "FILE")]

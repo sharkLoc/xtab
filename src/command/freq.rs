@@ -9,6 +9,8 @@ pub fn freq_csv(
     no_header: bool,
     delimiter: u8,
     out_delimiter: u8,
+    tabin: bool,
+    tabout: bool,
     index_str: String,
     sort_key: bool,
     sort_value: bool,
@@ -18,11 +20,19 @@ pub fn freq_csv(
     compression_level: u32,
 ) -> Result<(), Error> {
 
-    let mut csv_reader = ReaderBuilder::new()
+    let mut csv_reader = if tabin {
+        ReaderBuilder::new()
+        .has_headers(no_header)
+        .flexible(true)
+        .delimiter('\t' as u8)
+        .from_reader(file_reader(csv.as_ref())?)
+    } else {
+        ReaderBuilder::new()
         .has_headers(no_header)
         .flexible(true)
         .delimiter(delimiter)
-        .from_reader(file_reader(csv.as_ref())?);
+        .from_reader(file_reader(csv.as_ref())?)
+    };
 
     let mut flag = 0usize;
     if sort_key {
@@ -67,10 +77,17 @@ pub fn freq_csv(
         *hash.entry(key).or_insert(0) += 1;
     }
 
-    let mut csv_writer = WriterBuilder::new()
+    let mut csv_writer = if tabout {
+        WriterBuilder::new()
+        .has_headers(no_header)
+        .delimiter('\t' as u8)
+        .from_writer(file_writer(csvo.as_ref(), compression_level)?)
+    } else {
+        WriterBuilder::new()
         .has_headers(no_header)
         .delimiter(out_delimiter)
-        .from_writer(file_writer(csvo.as_ref(), compression_level)?);
+        .from_writer(file_writer(csvo.as_ref(), compression_level)?)
+    };
 
     if sort_key {
         let mut count = hash.iter().collect::<Vec<(&String, &usize)>>();

@@ -8,17 +8,26 @@ use std::path::PathBuf;
 pub fn csv_xlsx(
     no_header: bool,
     delimiter: u8,
+    tabin: bool,
     bold_first: bool,
     border_first: bool,
     csv: Option<PathBuf>,
     xlsx: &str,
 ) -> Result<(), Error> {
 
-    let mut csv_reader = ReaderBuilder::new()
+    let mut csv_reader =  if tabin {
+        ReaderBuilder::new()
+        .has_headers(no_header)
+        .flexible(true)
+        .delimiter('\t' as u8)
+        .from_reader(file_reader(csv.as_ref())?)
+    } else {
+        ReaderBuilder::new()
         .has_headers(no_header)
         .flexible(true)
         .delimiter(delimiter)
-        .from_reader(file_reader(csv.as_ref())?);
+        .from_reader(file_reader(csv.as_ref())?)
+    }; 
 
     match csv {
         Some(csv) => info!("read file from: {}", csv.display()),

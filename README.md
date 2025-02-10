@@ -26,8 +26,8 @@ cargo b --release
 
 ```bash
 xtab -- CSV command line utilities
-Version: 0.0.9
 
+Version: 0.0.9
 Authors: sharkLoc <mmtinfo@163.com>
 Source code: https://github.com/sharkLoc/xtab.git
 
@@ -50,7 +50,7 @@ Commands:
   freq       Build frequency table of selected column in CSV data
   head       Print first N records from CSV file
   pretty     Convert CSV to a readable aligned table [aliases: prt]
-  replace    Replace data of matched fields
+  replace    Replace data of matched fields [aliases: rp]
   reverse    Reverses rows of CSV data [aliases: rev]
   sample     Randomly select rows from CSV file using reservoir sampling
   search     Applies the regex to each field individually and shows only matching rows
@@ -65,8 +65,11 @@ Commands:
 Global Arguments:
   -d, --delimiter <CHAR>      Set delimiter for input csv file, e.g., in linux -d $'\t' for tab, in powershell -d `t for tab [default: ,]
   -D, --out-delimite <CHAR>   Set delimiter for output CSV file, e.g., in linux -D $'\t' for tab, in powershell -D `t for tab [default: ,]
+  -t, --tabs                  Specifies that the input CSV file is delimited with tabs. Overrides "-d"
+  -T, --out-tabs              Specifies that the output is delimited with tabs. Overrides "-D"
       --log <FILE>            If file name specified, write log message to this file, or write to stderr
-      --compress-level <INT>  Set compression level 1 (compress faster) - 9 (compress better) for gzip/bzip2/xz output file, just work with option -o/--out [default: 6]
+      --compress-level <INT>  Set compression level 1 (compress faster) - 9 (compress better) for gzip/bzip2/xz output file, just work with option -o/--out
+                              [default: 6]
   -v, --verbosity...          control verbosity of logging, [-v: Error, -vv: Warn, -vvv: Info, -vvvv: Debug, -vvvvv: Trace, defalut: Debug]
   [CSV]                   Input CSV file name, if file not specified read data from stdin
 
@@ -77,4 +80,5 @@ Global FLAGS:
   -V, --version    prints version information
 
 Use "xtab help [command]" for more information about a command
+
 ```

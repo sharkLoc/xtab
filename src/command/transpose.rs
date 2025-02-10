@@ -8,16 +8,26 @@ pub fn transpose_csv(
     no_header: bool,
     delimiter: u8,
     out_delimiter: u8,
+    tabin: bool,
+    tabout: bool,
     csv: Option<PathBuf>,
     csvo: Option<PathBuf>,
     compression_level: u32,
 ) -> Result<(), Error> {
 
-    let mut csv_reader = ReaderBuilder::new()
+    let mut csv_reader = if tabin {
+        ReaderBuilder::new()
+        .has_headers(no_header)
+        .flexible(true)
+        .delimiter('\t' as u8)
+        .from_reader(file_reader(csv.as_ref())?)
+    } else {
+        ReaderBuilder::new()
         .has_headers(no_header)
         .flexible(true)
         .delimiter(delimiter)
-        .from_reader(file_reader(csv.as_ref())?);
+        .from_reader(file_reader(csv.as_ref())?)
+    };
 
     match csv {
         Some(csv) => info!("read file from: {}", csv.display()),
@@ -31,10 +41,17 @@ pub fn transpose_csv(
         }
     }
 
-    let mut csv_writer = WriterBuilder::new()
+    let mut csv_writer = if tabout {
+        WriterBuilder::new()
+        .has_headers(no_header)
+        .delimiter('\t' as u8)
+        .from_writer(file_writer(csvo.as_ref(), compression_level)?)
+    } else {
+        WriterBuilder::new()
         .has_headers(no_header)
         .delimiter(out_delimiter)
-        .from_writer(file_writer(csvo.as_ref(), compression_level)?);
+        .from_writer(file_writer(csvo.as_ref(), compression_level)?)
+    };
 
     let mut str_rec = StringRecord::new();
     for i in 0..df_hash.len() {

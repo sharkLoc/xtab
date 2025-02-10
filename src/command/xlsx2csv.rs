@@ -9,6 +9,7 @@ pub fn xlsx_csv(
     xlsx: Option<PathBuf>,
     sheet_idx: usize,
     out_delimiter: u8,
+    tabout: bool,
     csv: Option<PathBuf>,
     compression_level: u32,
 ) -> Result<(), Error> {
@@ -31,10 +32,17 @@ pub fn xlsx_csv(
     info!("select sheet: \"{}\"", names[sheet_idx - 1]);
 
     let sheet = xlsx.worksheet_range_at(sheet_idx - 1);
-    let mut csv_writer = WriterBuilder::new()
+    let mut csv_writer = if tabout {
+        WriterBuilder::new()
+        .has_headers(true)
+        .delimiter('\t' as u8)
+        .from_writer(file_writer(csv.as_ref(), compression_level)?)
+    } else {
+        WriterBuilder::new()
         .has_headers(true)
         .delimiter(out_delimiter)
-        .from_writer(file_writer(csv.as_ref(), compression_level)?);
+        .from_writer(file_writer(csv.as_ref(), compression_level)?)
+    };
 
     if let Some(tab) = sheet {
         let df = tab?;

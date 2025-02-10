@@ -9,6 +9,8 @@ pub fn drop_csv(
     no_header: bool,
     delimiter: u8,
     out_delimiter: u8,
+    tabin: bool,
+    tabout: bool,
     index_str: String,
     invert: bool,
     csv: Option<PathBuf>,
@@ -16,11 +18,19 @@ pub fn drop_csv(
     compression_level: u32,
 ) -> Result<(), Error> {
 
-    let mut csv_reader = ReaderBuilder::new()
+    let mut csv_reader = if tabin {
+        ReaderBuilder::new()
+        .has_headers(no_header)
+        .flexible(true)
+        .delimiter('\t' as u8)
+        .from_reader(file_reader(csv.as_ref())?)
+    } else {
+        ReaderBuilder::new()
         .has_headers(no_header)
         .flexible(true)
         .delimiter(delimiter)
-        .from_reader(file_reader(csv.as_ref())?);
+        .from_reader(file_reader(csv.as_ref())?)
+    };
 
     match csv {
         Some(csv) => info!("read file from: {}", csv.display()),
@@ -42,10 +52,17 @@ pub fn drop_csv(
         }
     }
 
-    let mut csv_writer = WriterBuilder::new()
+    let mut csv_writer = if tabout {
+        WriterBuilder::new()
+        .has_headers(no_header)
+        .delimiter('\t' as u8)
+        .from_writer(file_writer(csvo.as_ref(), compression_level)?)
+    } else {
+        WriterBuilder::new()
         .has_headers(no_header)
         .delimiter(out_delimiter)
-        .from_writer(file_writer(csvo.as_ref(), compression_level)?);
+        .from_writer(file_writer(csvo.as_ref(), compression_level)?)
+    };
 
     let mut rec_new = StringRecord::new();
     for rec in csv_reader.records().flatten() {
