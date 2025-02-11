@@ -22,6 +22,8 @@ cargo b --release
 # mv target/release/xtab to anywhere you want 
 ```
 
+#### or download the latest prebuilt binary for Linux users from [xtab]( https://github.com/sharkLoc/xtab/releases/download/v0.09/xtab)
+
 ## usage
 
 ```bash
