@@ -1,8 +1,9 @@
 [package]
 name = "xtab"
-version = "0.0.9"
+version = "0.1.0"
 authors = ["sharkLoc <mmtinfo@163.com>"]
-edition = "2021"
+edition = "2024"
+rust-version = "1.85.0"
 homepage = "https://github.com/sharkLoc/xtab"
 description = "xtab: CSV command line utilities"
 repository = "https://github.com/sharkLoc/xtab"
