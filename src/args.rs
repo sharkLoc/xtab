@@ -1,7 +1,7 @@
 use clap::{value_parser, ArgAction, Parser};
 use std::path::PathBuf;
 
-pub const VERSION:&str = "0.0.9";
+pub const VERSION:&str = "0.1.0";
 
 #[derive(Debug, Parser)]
 #[command(

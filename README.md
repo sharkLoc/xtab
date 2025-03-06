@@ -29,7 +29,7 @@ cargo b --release
 ```bash
 xtab -- CSV command line utilities
 
-Version: 0.0.9
+Version: 0.1.0
 Authors: sharkLoc <mmtinfo@163.com>
 Source code: https://github.com/sharkLoc/xtab.git
 
