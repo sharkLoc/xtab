@@ -47,7 +47,7 @@ pub fn sample_csv(
         if idx < num {
             get_rec.push(rec);
         } else {
-            let ret = rng.gen_range(0..=idx);
+            let ret = rng.random_range(0..=idx);
             if ret < num {
                 get_rec[ret] = rec;
             }

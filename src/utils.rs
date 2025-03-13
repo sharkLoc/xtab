@@ -2,7 +2,7 @@ use anyhow::{Error, Ok, Result};
 use log::*;
 use std::{
     fs::{File, OpenOptions},
-    io::{self, prelude::*, BufRead, BufReader, BufWriter, Write},
+    io::{self, prelude::*, IsTerminal, BufRead, BufReader, BufWriter, Write},
     path::Path,
 };
 
@@ -102,7 +102,7 @@ where
             Ok(Box::new(BufReader::with_capacity(BUFF_SIZE, fp)))
         }
     } else {
-        if atty::is(atty::Stream::Stdin) {
+        if io::stdin().is_terminal(){
             error!("{}", Xerror::StdinNotDetected);
             std::process::exit(1);
         }
